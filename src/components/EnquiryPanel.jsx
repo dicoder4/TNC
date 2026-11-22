@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   INSTAGRAM_DM_URL,
+  INSTAGRAM_PROFILE_URL,
   OCCASIONS,
   PERFORMANCES,
   TIME_PREFS,
@@ -122,6 +123,7 @@ export default function EnquiryPanel({
 }) {
   const [status, setStatus] = useState(null); // null | "copied" | "failed"
   const [showPreview, setShowPreview] = useState(false);
+  const [triedInstagram, setTriedInstagram] = useState(false);
 
   const selection = { eventDates, sessions, consult };
   const ready = hasAnyDate(selection) || details.early;
@@ -156,6 +158,8 @@ export default function EnquiryPanel({
     // A real link (not window.open) lets phones open the Instagram app's DM.
     const copied = copyText(message);
     notify("Instagram");
+    // We can't see whether the DM tab worked, so always offer the profile as a backup.
+    setTriedInstagram(true);
     copied.then((ok) => {
       setStatus(ok ? "copied" : "failed");
       if (!ok) setShowPreview(true);
@@ -399,6 +403,20 @@ export default function EnquiryPanel({
           {status === null && ready && (
             <span className="text-tnc-teal/50">
               WhatsApp fills in your message. For Instagram, we copy it so you can paste it.
+            </span>
+          )}
+          {triedInstagram && (
+            <span className="mt-1.5 block text-tnc-teal/60">
+              DM didn&apos;t open?{" "}
+              <a
+                href={INSTAGRAM_PROFILE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-tnc-pink underline decoration-tnc-pink/30 underline-offset-4 hover:decoration-tnc-pink"
+              >
+                Open our Instagram profile
+              </a>{" "}
+              and tap Message.
             </span>
           )}
         </div>

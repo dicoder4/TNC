@@ -178,7 +178,7 @@ export default function Hero() {
               <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none" />
             </svg>
             @the_naach_company
-            <span className="text-tnc-teal/50">· 450 followers</span>
+            <span className="text-tnc-teal/50">· 450+ followers</span>
           </motion.a>
         </div>
       </div>
