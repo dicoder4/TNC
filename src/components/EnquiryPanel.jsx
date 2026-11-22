@@ -44,6 +44,32 @@ function Chip({ active, onClick, children }) {
   );
 }
 
+function InstagramIcon() {
+  return (
+    <svg
+      aria-hidden
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="4.2" />
+      <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg aria-hidden width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.85 9.85 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.2 8.2 0 0 1 8.24 8.25c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48a.92.92 0 0 0-.66.31c-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.29Z" />
+    </svg>
+  );
+}
+
 function Step({ n, title, children }) {
   return (
     <div>
@@ -96,13 +122,12 @@ export default function EnquiryPanel({
 }) {
   const [status, setStatus] = useState(null); // null | "copied" | "failed"
   const [showPreview, setShowPreview] = useState(false);
-  const [showMore, setShowMore] = useState(false);
 
   const selection = { eventDates, sessions, consult };
   const ready = hasAnyDate(selection) || details.early;
   const message = useMemo(
     () => buildMessage({ details, eventDates, sessions, consult, bookedUntilLabel }),
-    [details, eventDates, sessions, consult, bookedUntilLabel]
+    [details, eventDates, sessions, consult, bookedUntilLabel],
   );
 
   const set = (field) => (value) => onDetailsChange({ ...details, [field]: value });
@@ -110,11 +135,8 @@ export default function EnquiryPanel({
     set(field)(
       details[field].includes(value)
         ? details[field].filter((x) => x !== value)
-        : [...details[field], value]
+        : [...details[field], value],
     );
-
-  const extrasCount =
-    details.occasions.length + details.performances.length + (details.notes.trim() ? 1 : 0);
 
   // Email/log each distinct enquiry once, whichever button the customer uses.
   const lastNotified = useRef(null);
@@ -122,15 +144,18 @@ export default function EnquiryPanel({
     if (lastNotified.current === message) return;
     lastNotified.current = message;
     notifyTeam(
-      enquiryPayload({ details, eventDates, sessions, consult, message, bookedUntilLabel }, channel)
+      enquiryPayload(
+        { details, eventDates, sessions, consult, message, bookedUntilLabel },
+        channel,
+      ),
     );
   }
 
   function sendInstagram() {
-    // Start the copy and open the DM in the same click so neither is blocked.
+    // Runs on the link's click, before it navigates, so the copy is allowed.
+    // A real link (not window.open) lets phones open the Instagram app's DM.
     const copied = copyText(message);
     notify("Instagram");
-    window.open(INSTAGRAM_DM_URL, "_blank", "noopener,noreferrer");
     copied.then((ok) => {
       setStatus(ok ? "copied" : "failed");
       if (!ok) setShowPreview(true);
@@ -255,93 +280,84 @@ export default function EnquiryPanel({
           />
         </div>
 
-        <button
-          type="button"
-          onClick={() => setShowMore((s) => !s)}
-          aria-expanded={showMore}
-          className="mt-3 flex items-center gap-1.5 text-xs font-medium text-tnc-pink transition-colors hover:text-tnc-burgundy"
-        >
-          <span
-            aria-hidden
-            className={`inline-block transition-transform ${showMore ? "rotate-45" : ""}`}
-          >
-            +
-          </span>
-          {showMore ? "Fewer details" : "Add occasion, songs & more"}
-          <span className="text-tnc-teal/45">
-            {extrasCount > 0 && !showMore ? `(${extrasCount} added)` : "(optional)"}
-          </span>
-        </button>
-
-        <AnimatePresence initial={false}>
-          {showMore && (
-            <motion.div {...reveal} className="overflow-hidden">
-              <div className="flex flex-col gap-4 pt-4">
-                <div>
-                  <div className="mb-2 text-xs text-tnc-teal/60">Occasion</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {OCCASIONS.map((o) => (
-                      <Chip
-                        key={o}
-                        active={details.occasions.includes(o)}
-                        onClick={() => toggle("occasions", o)}
-                      >
-                        {o}
-                      </Chip>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <div className="mb-2 text-xs text-tnc-teal/60">Looking for</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {PERFORMANCES.map((p) => (
-                      <Chip
-                        key={p}
-                        active={details.performances.includes(p)}
-                        onClick={() => toggle("performances", p)}
-                      >
-                        {p}
-                      </Chip>
-                    ))}
-                  </div>
-                </div>
-                <textarea
-                  className={`${inputCls} min-h-[80px] resize-y`}
-                  placeholder="Songs, number of people, venue…"
-                  value={details.notes}
-                  onChange={(e) => set("notes")(e.target.value)}
-                  aria-label="Notes"
-                />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <div className="mt-5 flex flex-col gap-4">
+          <div>
+            <div className="mb-2 text-xs text-tnc-teal/60">
+              Occasion <span className="text-tnc-teal/40">(optional)</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {OCCASIONS.map((o) => (
+                <Chip
+                  key={o}
+                  active={details.occasions.includes(o)}
+                  onClick={() => toggle("occasions", o)}
+                >
+                  {o}
+                </Chip>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="mb-2 text-xs text-tnc-teal/60">
+              Looking for <span className="text-tnc-teal/40">(optional)</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {PERFORMANCES.map((p) => (
+                <Chip
+                  key={p}
+                  active={details.performances.includes(p)}
+                  onClick={() => toggle("performances", p)}
+                >
+                  {p}
+                </Chip>
+              ))}
+            </div>
+          </div>
+          <textarea
+            className={`${inputCls} min-h-[80px] resize-y`}
+            placeholder="Anything else? Songs, number of people, venue… (optional)"
+            value={details.notes}
+            onChange={(e) => set("notes")(e.target.value)}
+            aria-label="Notes"
+          />
+        </div>
       </Step>
 
       {/* 3 · send */}
-      <Step n={3} title="Send it to us">
-        <button
-          type="button"
-          disabled={!ready}
-          onClick={sendInstagram}
-          className="w-full rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-6 py-3 text-sm font-semibold tracking-wide text-tnc-ivory shadow-[0_8px_30px_rgba(173,36,81,0.25)] transition-opacity disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
-        >
-          {ready ? "Send on Instagram" : "Pick a date first"}
-        </button>
-
-        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs">
+      <Step n={3} title="Message us">
+        <div className={`grid gap-2.5 ${whatsappUrl ? "sm:grid-cols-2" : ""}`}>
+          <a
+            href={ready ? INSTAGRAM_DM_URL : undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-disabled={!ready}
+            onClick={ready ? sendInstagram : undefined}
+            className={`flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-5 py-3 text-sm font-semibold tracking-wide text-tnc-ivory shadow-[0_8px_24px_rgba(173,36,81,0.25)] transition-transform hover:-translate-y-0.5 ${
+              ready ? "" : "pointer-events-none opacity-40 shadow-none"
+            }`}
+          >
+            <InstagramIcon />
+            DM on Instagram
+          </a>
           {whatsappUrl && (
             <a
               href={ready ? whatsappUrl(message) : undefined}
               target="_blank"
               rel="noopener noreferrer"
               aria-disabled={!ready}
-              onClick={() => notify("WhatsApp")}
-              className={`${linkCls} ${ready ? "" : "pointer-events-none opacity-40"}`}
+              onClick={ready ? () => notify("WhatsApp") : undefined}
+              className={`flex items-center justify-center gap-2 rounded-full bg-tnc-teal px-5 py-3 text-sm font-semibold tracking-wide text-tnc-ivory shadow-[0_8px_24px_rgba(14,57,58,0.25)] transition-transform hover:-translate-y-0.5 ${
+                ready ? "" : "pointer-events-none opacity-40 shadow-none"
+              }`}
             >
-              WhatsApp instead
+              <WhatsAppIcon />
+              Chat on WhatsApp
             </a>
           )}
+        </div>
+        {!ready && <p className="mt-2 text-center text-xs text-tnc-teal/50">Pick a date first.</p>}
+
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs">
           <button type="button" disabled={!ready} onClick={copyOnly} className={linkCls}>
             Copy message
           </button>
@@ -366,7 +382,10 @@ export default function EnquiryPanel({
           )}
         </AnimatePresence>
 
-        <div className="mt-3 min-h-[1.25rem] text-center text-xs leading-relaxed" aria-live="polite">
+        <div
+          className="mt-3 min-h-[1.25rem] text-center text-xs leading-relaxed"
+          aria-live="polite"
+        >
           {status === "copied" && (
             <span className="text-emerald-800">
               Copied! Just paste it in the chat and hit send.
@@ -379,7 +398,7 @@ export default function EnquiryPanel({
           )}
           {status === null && ready && (
             <span className="text-tnc-teal/50">
-              We&apos;ll copy your message so you can paste it in our DMs.
+              WhatsApp fills in your message. For Instagram, we copy it so you can paste it.
             </span>
           )}
         </div>

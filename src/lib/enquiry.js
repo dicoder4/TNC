@@ -5,9 +5,9 @@
 // WhatsApp does support pre-filled text, so that button is fully automatic.
 
 export const INSTAGRAM_HANDLE = "the_naach_company";
-// Instagram's own DM route. (ig.me/m/... just redirects here, and the ig.me
-// domain times out on some networks, so link to the destination directly.)
-export const INSTAGRAM_DM_URL = `https://www.instagram.com/m/${INSTAGRAM_HANDLE}/`;
+// Instagram's official "message us" link. On phones it opens the DM thread
+// straight in the Instagram app (instead of the profile page).
+export const INSTAGRAM_DM_URL = `https://ig.me/m/${INSTAGRAM_HANDLE}`;
 
 const WHATSAPP_NUMBER = (import.meta.env.VITE_WHATSAPP_NUMBER || "").replace(/\D/g, "");
 /** null when no WhatsApp number is configured. */

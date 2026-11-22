@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
+import { INSTAGRAM_DM_URL } from "../lib/enquiry";
 
 export default function Footer() {
   return (
     <footer className="relative border-t border-tnc-gold/30 bg-tnc-teal px-6 py-16">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center">
         <motion.a
-          href="https://www.instagram.com/the_naach_company/"
+          href={INSTAGRAM_DM_URL}
           target="_blank"
           rel="noopener noreferrer"
           whileHover={{ scale: 1.05 }}
