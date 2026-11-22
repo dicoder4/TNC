@@ -71,6 +71,8 @@ function SelectionRow({ dot, label, value, onRemove, children }) {
 }
 
 export default function EnquiryPanel({
+  bookedUntilLabel,
+  bookingStartLabel,
   eventDates,
   sessions,
   consult,
@@ -85,10 +87,10 @@ export default function EnquiryPanel({
   const [showPreview, setShowPreview] = useState(false);
 
   const selection = { eventDates, sessions, consult };
-  const ready = hasAnyDate(selection);
+  const ready = hasAnyDate(selection) || details.early;
   const message = useMemo(
-    () => buildMessage({ details, eventDates, sessions, consult }),
-    [details, eventDates, sessions, consult]
+    () => buildMessage({ details, eventDates, sessions, consult, bookedUntilLabel }),
+    [details, eventDates, sessions, consult, bookedUntilLabel]
   );
 
   const set = (field) => (value) => onDetailsChange({ ...details, [field]: value });
@@ -104,7 +106,9 @@ export default function EnquiryPanel({
   function notify(channel) {
     if (lastNotified.current === message) return;
     lastNotified.current = message;
-    notifyTeam(enquiryPayload({ details, eventDates, sessions, consult, message }, channel));
+    notifyTeam(
+      enquiryPayload({ details, eventDates, sessions, consult, message, bookedUntilLabel }, channel)
+    );
   }
 
   function sendInstagram() {
@@ -127,7 +131,7 @@ export default function EnquiryPanel({
   }
 
   return (
-    <div className="flex flex-col gap-6 rounded-3xl border border-tnc-beige bg-tnc-ivory/85 p-5 shadow-[0_4px_30px_rgba(83,44,32,0.06)] backdrop-blur-sm sm:p-7">
+    <div id="enquiry-panel" className="flex scroll-mt-24 flex-col gap-6 rounded-3xl border border-tnc-beige bg-tnc-ivory/85 p-5 shadow-[0_4px_30px_rgba(83,44,32,0.06)] backdrop-blur-sm sm:p-7">
       <div>
         <h3 className="font-display text-xl italic text-tnc-teal sm:text-2xl">Your enquiry</h3>
         <p className="mt-1 text-xs text-tnc-teal/60">
@@ -140,7 +144,30 @@ export default function EnquiryPanel({
         {!ready && (
           <div className="rounded-xl border border-dashed border-tnc-tan/50 px-4 py-6 text-center text-sm text-tnc-teal/55">
             No dates picked yet. Choose a date type, then tap the calendar.
+            <button
+              type="button"
+              onClick={() => onDetailsChange({ ...details, early: true })}
+              className="mt-2 block w-full text-xs font-medium text-tnc-burgundy underline decoration-tnc-burgundy/30 underline-offset-4 hover:decoration-tnc-burgundy"
+            >
+              Celebrating before {bookingStartLabel}? Say hello anyway
+            </button>
           </div>
+        )}
+        {details.early && (
+          <SelectionRow
+            dot="bg-tnc-burgundy"
+            label={`Event before ${bookingStartLabel}`}
+            value="We'd love to help you find the right choreographer for your day."
+            onRemove={() => onDetailsChange({ ...details, early: false, earlyDate: "" })}
+          >
+            <input
+              className={`${inputCls} mt-3`}
+              placeholder="Your event date, e.g. 14 Feb 2027"
+              value={details.earlyDate}
+              onChange={(e) => set("earlyDate")(e.target.value)}
+              aria-label="Your event date"
+            />
+          </SelectionRow>
         )}
         {eventDates.map((key) => (
           <SelectionRow

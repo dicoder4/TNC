@@ -73,10 +73,27 @@ function UpdateMedia({ media }) {
       <button
         type="button"
         onClick={() => setMuted((m) => !m)}
-        className="absolute bottom-2 right-2 rounded-full bg-tnc-teal/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-tnc-ivory backdrop-blur-sm"
+        className="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-tnc-teal/80 text-tnc-ivory backdrop-blur-sm transition-colors hover:bg-tnc-teal"
         aria-label={muted ? "Unmute video" : "Mute video"}
       >
-        {muted ? "Sound on" : "Mute"}
+        {muted ? (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M3 9v6h4l5 5V4L7 9H3z" />
+            <line x1="16" y1="9" x2="22" y2="15" stroke="currentColor" strokeWidth="2" />
+            <line x1="22" y1="9" x2="16" y2="15" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        ) : (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M3 9v6h4l5 5V4L7 9H3z" />
+            <path
+              d="M16 8a5 5 0 0 1 0 8M19 5a9 9 0 0 1 0 14"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+              strokeLinecap="round"
+            />
+          </svg>
+        )}
       </button>
     </div>
   );

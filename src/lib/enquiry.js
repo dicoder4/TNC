@@ -63,7 +63,13 @@ export function hasAnyDate({ eventDates, sessions, consult }) {
   return eventDates.length > 0 || Boolean(sessions.start) || Boolean(consult.date);
 }
 
-export function buildMessage({ details, eventDates, sessions, consult }) {
+/** Text for an enquiry whose event falls in the booked-out period. */
+function earlyDateText(details) {
+  const date = details.earlyDate?.trim();
+  return date || "date not given";
+}
+
+export function buildMessage({ details, eventDates, sessions, consult, bookedUntilLabel }) {
   const lines = ["Hi TNC! I'd love to book choreography with you.", ""];
 
   const info = [];
@@ -79,6 +85,16 @@ export function buildMessage({ details, eventDates, sessions, consult }) {
     info.push(`Looking for: ${details.performances.join(", ")}`);
   }
   if (info.length) lines.push(...info, "");
+
+  if (details.early) {
+    lines.push(
+      details.earlyDate?.trim()
+        ? `My event is on ${details.earlyDate.trim()}. I know you're all booked up until ${bookedUntilLabel},`
+        : `My event is before your calendar opens. I know you're all booked up until ${bookedUntilLabel},`,
+      "but I'd love it if you could recommend a choreographer you trust!"
+    );
+    if (hasAnyDate({ eventDates, sessions, consult })) lines.push("");
+  }
 
   lines.push(...dateLines({ eventDates, sessions, consult }));
 
@@ -114,7 +130,18 @@ function dateLines({ eventDates, sessions, consult }) {
 const ENQUIRY_URL = import.meta.env.VITE_ENQUIRY_URL;
 
 /** Flat fields for one Sheet row / email. */
-export function enquiryPayload({ details, eventDates, sessions, consult, message }, channel) {
+export function enquiryPayload(
+  { details, eventDates, sessions, consult, message, bookedUntilLabel },
+  channel
+) {
+  // The Sheet has fixed columns, so booked-out enquiries go in "Event date(s)".
+  const eventDateText = [
+    details.early &&
+      `Before booking opens (${earlyDateText(details)}): wants recommendations, booked until ${bookedUntilLabel}`,
+    ...eventDates.map(formatKey),
+  ]
+    .filter(Boolean)
+    .join("; ");
   const consultTime =
     consult.time && consult.time !== "Any time" ? ` (${consult.time.toLowerCase()})` : "";
   let sessionText = "";
@@ -130,7 +157,7 @@ export function enquiryPayload({ details, eventDates, sessions, consult, message
     occasion: details.occasions.join(", "),
     location: details.location.trim(),
     lookingFor: details.performances.join(", "),
-    eventDates: eventDates.map(formatKey).join("; "),
+    eventDates: eventDateText,
     sessions: sessionText,
     consultation: consult.date ? formatKey(consult.date) + consultTime : "",
     notes: details.notes.trim(),

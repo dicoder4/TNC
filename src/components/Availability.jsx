@@ -12,6 +12,16 @@ import EnquiryPanel from "./EnquiryPanel";
 
 const easeOut = [0.16, 1, 0.3, 1];
 const MAX_MONTHS_AHEAD = 18;
+// Fully booked until the end of March 2027, so the calendar opens at April 2027.
+// Change this when the booked-out period changes.
+const BOOKING_START = { year: 2027, month: 3 }; // month is 0-based: 3 = April
+const bookedUntilLabel = monthLabelOf(BOOKING_START.year, BOOKING_START.month - 1);
+const bookingStartLabel = monthLabelOf(BOOKING_START.year, BOOKING_START.month);
+
+function monthLabelOf(year, month) {
+  return new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", month: "long", year: "numeric" })
+    .format(new Date(Date.UTC(year, month, 1, 12)));
+}
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const MODES = [
@@ -76,6 +86,8 @@ const EMPTY_DETAILS = {
   occasions: [],
   performances: [],
   notes: "",
+  early: false, // event falls in the booked-out period
+  earlyDate: "",
 };
 
 export default function Availability() {
@@ -86,7 +98,15 @@ export default function Availability() {
 
 function AvailabilityCalendar() {
   const today = useMemo(getToday, []);
-  const [view, setView] = useState({ year: today.year, month: today.month });
+  // First month shown: whichever is later, this month or the booking start.
+  const firstMonth = useMemo(() => {
+    const startIdx = BOOKING_START.year * 12 + BOOKING_START.month;
+    const todayIdx = today.year * 12 + today.month;
+    return todayIdx >= startIdx
+      ? { year: today.year, month: today.month }
+      : { ...BOOKING_START };
+  }, [today]);
+  const [view, setView] = useState(firstMonth);
   const [months, setMonths] = useState({}); // "y-m" -> { status, days }
   const [retryToken, setRetryToken] = useState(0);
 
@@ -116,7 +136,7 @@ function AvailabilityCalendar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, retryToken]);
 
-  const monthsAhead = (view.year - today.year) * 12 + (view.month - today.month);
+  const monthsAhead = (view.year - firstMonth.year) * 12 + (view.month - firstMonth.month);
   const canPrev = monthsAhead > 0;
   const canNext = monthsAhead < MAX_MONTHS_AHEAD;
 
@@ -205,6 +225,36 @@ function AvailabilityCalendar() {
             Pick your event date, when you&apos;d like to rehearse, and a time for a
             quick call. Choose any or all, then send it to us in one message.
           </p>
+        </motion.div>
+
+        {/* booked-out notice */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6, ease: easeOut }}
+          className="mx-auto mb-8 flex max-w-3xl flex-col items-center gap-4 rounded-2xl border border-tnc-burgundy/20 bg-tnc-burgundy/[0.06] px-5 py-4 text-center sm:flex-row sm:text-left"
+        >
+          <span className="shrink-0 rounded-full bg-tnc-burgundy px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-tnc-ivory">
+            Sold out
+          </span>
+          <p className="flex-1 text-sm leading-relaxed text-tnc-teal/80">
+            Thank you for all the love. Our dance card is full until {bookedUntilLabel}!
+            Celebrating sooner? Still say hello, and we&apos;ll happily point you to
+            choreographers we know and trust.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setDetails((d) => ({ ...d, early: true }));
+              document
+                .getElementById("enquiry-panel")
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+            className="shrink-0 rounded-full border border-tnc-burgundy/40 px-4 py-2 text-xs font-semibold tracking-wide text-tnc-burgundy transition-colors hover:bg-tnc-burgundy hover:text-tnc-ivory"
+          >
+            Celebrating sooner?
+          </button>
         </motion.div>
 
         <div className="grid items-start gap-6 lg:grid-cols-[1.15fr_1fr]">
@@ -433,6 +483,8 @@ function AvailabilityCalendar() {
             transition={{ duration: 0.7, delay: 0.2, ease: easeOut }}
           >
             <EnquiryPanel
+              bookedUntilLabel={bookedUntilLabel}
+              bookingStartLabel={bookingStartLabel}
               eventDates={eventDates}
               sessions={sessions}
               consult={consult}
