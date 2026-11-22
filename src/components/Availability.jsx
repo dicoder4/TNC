@@ -7,7 +7,7 @@ import {
   isConfigured,
   isDemo,
 } from "../lib/googleCalendar";
-import { INSTAGRAM_DM_URL } from "../lib/enquiry";
+import { INSTAGRAM_CONTACT_URL } from "../lib/enquiry";
 import EnquiryPanel from "./EnquiryPanel";
 
 const easeOut = [0.16, 1, 0.3, 1];
@@ -342,7 +342,7 @@ function AvailabilityCalendar() {
                     Try again
                   </button>
                   <a
-                    href={INSTAGRAM_DM_URL}
+                    href={INSTAGRAM_CONTACT_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-5 py-2 text-xs font-semibold tracking-wide text-tnc-ivory"

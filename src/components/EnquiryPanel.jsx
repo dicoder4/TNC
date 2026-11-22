@@ -1,8 +1,9 @@
 import { useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  INSTAGRAM_DM_URL,
+  INSTAGRAM_CONTACT_URL,
   INSTAGRAM_PROFILE_URL,
+  isPhone,
   OCCASIONS,
   PERFORMANCES,
   TIME_PREFS,
@@ -331,7 +332,7 @@ export default function EnquiryPanel({
       <Step n={3} title="Message us">
         <div className={`grid gap-2.5 ${whatsappUrl ? "sm:grid-cols-2" : ""}`}>
           <a
-            href={ready ? INSTAGRAM_DM_URL : undefined}
+            href={ready ? INSTAGRAM_CONTACT_URL : undefined}
             target="_blank"
             rel="noopener noreferrer"
             aria-disabled={!ready}
@@ -341,7 +342,7 @@ export default function EnquiryPanel({
             }`}
           >
             <InstagramIcon />
-            DM on Instagram
+            Message on Instagram
           </a>
           {whatsappUrl && (
             <a
@@ -392,7 +393,9 @@ export default function EnquiryPanel({
         >
           {status === "copied" && (
             <span className="text-emerald-800">
-              Copied! Just paste it in the chat and hit send.
+              {isPhone && triedInstagram
+                ? "Copied! On our profile, tap Message, then paste and send."
+                : "Copied! Just paste it in the chat and hit send."}
             </span>
           )}
           {status === "failed" && (
@@ -405,7 +408,7 @@ export default function EnquiryPanel({
               WhatsApp fills in your message. For Instagram, we copy it so you can paste it.
             </span>
           )}
-          {triedInstagram && (
+          {triedInstagram && !isPhone && (
             <span className="mt-1.5 block text-tnc-teal/60">
               DM didn&apos;t open?{" "}
               <a

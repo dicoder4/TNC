@@ -12,6 +12,13 @@ export const INSTAGRAM_DM_URL = `https://www.instagram.com/m/${INSTAGRAM_HANDLE}
 // Backup when the DM link doesn't open (e.g. some in-app browsers).
 export const INSTAGRAM_PROFILE_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 
+// The Instagram app doesn't handle the /m/ DM link (and ig.me is unreliable),
+// so phones go to the profile, which opens cleanly in the app; the customer
+// taps "Message" there. Desktop browsers open the DM thread directly.
+export const isPhone =
+  typeof navigator !== "undefined" && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+export const INSTAGRAM_CONTACT_URL = isPhone ? INSTAGRAM_PROFILE_URL : INSTAGRAM_DM_URL;
+
 const WHATSAPP_NUMBER = (import.meta.env.VITE_WHATSAPP_NUMBER || "").replace(/\D/g, "");
 /** null when no WhatsApp number is configured. */
 export const whatsappUrl = WHATSAPP_NUMBER
