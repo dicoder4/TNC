@@ -18,19 +18,19 @@ const MODES = [
   {
     id: "event",
     label: "Event date",
-    dot: "bg-amber-400",
+    dot: "bg-tnc-gold",
     hint: "The day(s) you'll perform. Tap one or more open dates.",
   },
   {
     id: "sessions",
     label: "Choreo sessions",
-    dot: "bg-pink-500",
+    dot: "bg-tnc-pink",
     hint: "When you'd like to rehearse. Tap a start date, then an end date.",
   },
   {
     id: "consult",
     label: "Consultation call",
-    dot: "bg-violet-400",
+    dot: "bg-tnc-teal",
     hint: "A quick call to plan your choreo. Tap one open date.",
   },
 ];
@@ -178,12 +178,12 @@ function AvailabilityCalendar() {
       : activeMode.hint;
 
   return (
-    <section id="availability" className="relative overflow-hidden bg-[#08060a] px-4 py-24 sm:px-6">
+    <section id="availability" className="relative overflow-hidden bg-tnc-cream px-4 py-24 sm:px-6">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 20% 30%, rgba(236,72,153,0.12), transparent 45%), radial-gradient(circle at 85% 80%, rgba(246,196,83,0.08), transparent 45%)",
+            "radial-gradient(circle at 20% 30%, rgba(173,36,81,0.07), transparent 45%), radial-gradient(circle at 85% 80%, rgba(207,159,66,0.14), transparent 45%)",
         }}
       />
 
@@ -195,13 +195,13 @@ function AvailabilityCalendar() {
           transition={{ duration: 0.7, ease: easeOut }}
           className="mx-auto mb-10 max-w-2xl text-center"
         >
-          <span className="mb-4 inline-block text-[11px] font-medium uppercase tracking-[0.25em] text-pink-200/70">
+          <span className="mb-4 inline-block text-[11px] font-medium uppercase tracking-[0.25em] text-tnc-pink">
             Availability
           </span>
-          <h2 className="font-display text-3xl italic leading-tight text-white sm:text-4xl">
+          <h2 className="font-display text-3xl italic leading-tight text-tnc-teal sm:text-4xl">
             Plan your dates
           </h2>
-          <p className="mt-4 text-sm text-gray-400">
+          <p className="mt-4 text-sm text-tnc-teal/70">
             Pick your event date, when you&apos;d like to rehearse, and a time for a
             quick call. Choose any or all, then send it to us in one message.
           </p>
@@ -213,7 +213,7 @@ function AvailabilityCalendar() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.7, delay: 0.1, ease: easeOut }}
-            className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm sm:p-7"
+            className="rounded-3xl border border-tnc-beige bg-tnc-ivory/85 p-4 shadow-[0_4px_30px_rgba(83,44,32,0.06)] backdrop-blur-sm sm:p-7"
           >
             {/* mode tabs */}
             <div className="mb-3 grid grid-cols-3 gap-2" role="tablist" aria-label="Date type">
@@ -228,22 +228,22 @@ function AvailabilityCalendar() {
                     onClick={() => setMode(m.id)}
                     className={`flex flex-col items-start gap-1 rounded-2xl border px-3 py-2.5 text-left transition-colors ${
                       active
-                        ? "border-pink-300/50 bg-white/[0.08]"
-                        : "border-white/10 hover:border-white/25"
+                        ? "border-tnc-pink/50 bg-white/70"
+                        : "border-tnc-beige hover:border-tnc-tan"
                     }`}
                   >
-                    <span className="flex items-center gap-2 text-[11px] font-semibold leading-tight tracking-wide text-white sm:text-xs">
+                    <span className="flex items-center gap-2 text-[11px] font-semibold leading-tight tracking-wide text-tnc-teal sm:text-xs">
                       <span className={`h-2 w-2 shrink-0 rounded-full ${m.dot}`} />
                       {m.label}
                     </span>
-                    <span className="h-4 truncate text-[10px] text-gray-400">
+                    <span className="h-4 truncate text-[10px] text-tnc-teal/55">
                       {modeSummary[m.id] ?? "Not set"}
                     </span>
                   </button>
                 );
               })}
             </div>
-            <p className="mb-6 min-h-[2rem] text-center text-xs text-gray-400" aria-live="polite">
+            <p className="mb-6 min-h-[2rem] text-center text-xs text-tnc-teal/65" aria-live="polite">
               {hint}
             </p>
 
@@ -254,15 +254,15 @@ function AvailabilityCalendar() {
                 onClick={() => shiftMonth(-1)}
                 disabled={!canPrev}
                 aria-label="Previous month"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-pink-100 transition-colors hover:bg-white/10 disabled:pointer-events-none disabled:opacity-25"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-tnc-teal/20 text-tnc-teal transition-colors hover:bg-tnc-teal/5 disabled:pointer-events-none disabled:opacity-25"
               >
                 ←
               </button>
               <div className="text-center">
-                <div className="font-display text-xl italic text-white sm:text-2xl">
+                <div className="font-display text-xl italic text-tnc-teal sm:text-2xl">
                   {monthLabelFormat.format(utcDate(view.year, view.month))}
                 </div>
-                <div className="mt-1 h-4 text-[11px] uppercase tracking-[0.2em] text-gray-500">
+                <div className="mt-1 h-4 text-[11px] uppercase tracking-[0.2em] text-tnc-tan">
                   {openCount !== null &&
                     (openCount === 0
                       ? "Fully booked"
@@ -274,7 +274,7 @@ function AvailabilityCalendar() {
                 onClick={() => shiftMonth(1)}
                 disabled={!canNext}
                 aria-label="Next month"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-pink-100 transition-colors hover:bg-white/10 disabled:pointer-events-none disabled:opacity-25"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-tnc-teal/20 text-tnc-teal transition-colors hover:bg-tnc-teal/5 disabled:pointer-events-none disabled:opacity-25"
               >
                 →
               </button>
@@ -282,12 +282,12 @@ function AvailabilityCalendar() {
 
             {current?.status === "error" ? (
               <div className="flex flex-col items-center gap-4 py-16 text-center">
-                <p className="text-sm text-gray-400">Couldn&apos;t load availability right now.</p>
+                <p className="text-sm text-tnc-teal/70">Couldn&apos;t load availability right now.</p>
                 <div className="flex gap-3">
                   <button
                     type="button"
                     onClick={() => setRetryToken((t) => t + 1)}
-                    className="rounded-full border border-white/15 px-5 py-2 text-xs font-semibold tracking-wide text-pink-50 transition-colors hover:bg-white/10"
+                    className="rounded-full border border-tnc-teal/20 px-5 py-2 text-xs font-semibold tracking-wide text-tnc-teal transition-colors hover:bg-tnc-teal/5"
                   >
                     Try again
                   </button>
@@ -295,7 +295,7 @@ function AvailabilityCalendar() {
                     href={INSTAGRAM_DM_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-full bg-gradient-to-r from-pink-500 to-amber-400 px-5 py-2 text-xs font-semibold tracking-wide text-black"
+                    className="rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-5 py-2 text-xs font-semibold tracking-wide text-tnc-ivory"
                   >
                     DM us to check a date
                   </a>
@@ -307,7 +307,7 @@ function AvailabilityCalendar() {
                   {WEEKDAYS.map((w) => (
                     <div
                       key={w}
-                      className="text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-500"
+                      className="text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-tnc-teal/50"
                     >
                       {w}
                     </div>
@@ -335,24 +335,24 @@ function AvailabilityCalendar() {
                       loading || c.isPast || (c.isBooked && mode !== "sessions");
 
                     let tone;
-                    if (loading) tone = "border-white/5 bg-white/[0.02] text-gray-600";
+                    if (loading) tone = "border-tnc-beige/50 bg-white/30 text-tnc-teal/30";
                     else if (isEvent)
-                      tone = "border-transparent bg-gradient-to-br from-amber-300 to-amber-500 font-semibold text-black";
+                      tone = "border-transparent bg-gradient-to-br from-tnc-gold-soft to-tnc-gold font-semibold text-tnc-teal";
                     else if (rangeRole === "end")
-                      tone = "border-transparent bg-pink-500 font-semibold text-white";
+                      tone = "border-transparent bg-tnc-pink font-semibold text-tnc-ivory";
                     else if (rangeRole === "mid")
-                      tone = "border-pink-400/30 bg-pink-500/25 text-pink-50";
-                    else if (c.isPast) tone = "border-transparent text-gray-700";
+                      tone = "border-tnc-pink/30 bg-tnc-pink/15 text-tnc-burgundy";
+                    else if (c.isPast) tone = "border-transparent text-tnc-teal/25";
                     else if (c.isBooked)
-                      tone = "border-pink-500/15 bg-pink-500/[0.08] text-pink-200/40";
-                    else tone = "border-white/10 bg-white/[0.04] text-white";
+                      tone = "border-tnc-beige bg-tnc-beige/50 text-tnc-tan";
+                    else tone = "border-tnc-beige bg-white/60 text-tnc-teal";
 
                     const hover =
                       !disabled && !isEvent && !rangeRole
-                        ? " hover:border-pink-300/50 hover:bg-white/[0.08]"
+                        ? " hover:border-tnc-pink/50 hover:bg-white"
                         : "";
                     const ring = isConsult
-                      ? " ring-2 ring-violet-400 ring-offset-2 ring-offset-[#0b0810]"
+                      ? " ring-2 ring-tnc-teal ring-offset-2 ring-offset-tnc-ivory"
                       : "";
 
                     const tags = [
@@ -376,7 +376,7 @@ function AvailabilityCalendar() {
                         <span
                           className={
                             c.isBooked && !loading && !rangeRole
-                              ? "line-through decoration-pink-300/40"
+                              ? "line-through decoration-tnc-tan/60"
                               : ""
                           }
                         >
@@ -385,14 +385,14 @@ function AvailabilityCalendar() {
                         {!loading && c.isBooked && (
                           <span
                             className={`mt-0.5 hidden text-[9px] font-semibold uppercase tracking-[0.12em] sm:block ${
-                              rangeRole ? "text-white/70" : "text-pink-300/60"
+                              rangeRole ? "text-tnc-ivory/80" : "text-tnc-tan"
                             }`}
                           >
                             Booked
                           </span>
                         )}
                         {c.isToday && (
-                          <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-amber-200" />
+                          <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-tnc-burgundy" />
                         )}
                       </button>
                     );
@@ -400,25 +400,25 @@ function AvailabilityCalendar() {
                 </div>
 
                 {/* legend */}
-                <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] uppercase tracking-[0.15em] text-gray-500">
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] uppercase tracking-[0.15em] text-tnc-teal/60">
                   <span className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded border border-white/10 bg-white/[0.06]" />
+                    <span className="h-3 w-3 rounded border border-tnc-beige bg-white/70" />
                     Open
                   </span>
                   <span className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded border border-pink-500/20 bg-pink-500/[0.12]" />
+                    <span className="h-3 w-3 rounded border border-tnc-beige bg-tnc-beige/70" />
                     Booked
                   </span>
                   <span className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded bg-amber-400" />
+                    <span className="h-3 w-3 rounded bg-tnc-gold" />
                     Event
                   </span>
                   <span className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded bg-pink-500" />
+                    <span className="h-3 w-3 rounded bg-tnc-pink" />
                     Sessions
                   </span>
                   <span className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded ring-2 ring-violet-400" />
+                    <span className="h-3 w-3 rounded ring-2 ring-tnc-teal" />
                     Call
                   </span>
                 </div>
@@ -446,7 +446,7 @@ function AvailabilityCalendar() {
               onClearConsult={() => setConsult((c) => ({ ...c, date: null }))}
             />
             {isDemo && (
-              <p className="mt-4 text-center text-[11px] text-amber-300/70">
+              <p className="mt-4 text-center text-[11px] text-tnc-burgundy/80">
                 Showing sample dates. Add your Google Calendar details to
                 <code className="mx-1">.env</code>to see real bookings.
               </p>

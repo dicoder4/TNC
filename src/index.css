@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    background-color: #f3f0e1;
+  }
+  body {
+    @apply bg-tnc-ivory font-sans text-tnc-teal antialiased;
+  }
+  ::selection {
+    @apply bg-tnc-pink/20 text-tnc-teal;
+  }
+}

@@ -17,12 +17,12 @@ const videos = [
 
 export default function VideoShowcase() {
   return (
-    <section id="moves" className="relative bg-[#08060a] px-6 py-24">
+    <section id="moves" className="relative bg-tnc-teal px-6 py-24">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 50% 0%, rgba(236,72,153,0.15), transparent 50%)",
+            "radial-gradient(circle at 50% 0%, rgba(207,159,66,0.16), transparent 50%), radial-gradient(circle at 90% 90%, rgba(173,36,81,0.18), transparent 45%)",
         }}
       />
 
@@ -34,10 +34,10 @@ export default function VideoShowcase() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto mb-14 max-w-2xl text-center"
         >
-          <span className="mb-4 inline-block text-[11px] font-medium uppercase tracking-[0.25em] text-pink-200/70">
+          <span className="mb-4 inline-block text-[11px] font-medium uppercase tracking-[0.25em] text-tnc-gold">
             The Moves
           </span>
-          <h2 className="font-display text-3xl italic leading-tight text-white sm:text-4xl">
+          <h2 className="font-display text-3xl italic leading-tight text-tnc-ivory sm:text-4xl">
             See what we bring to the floor
           </h2>
         </motion.div>
@@ -59,7 +59,7 @@ export default function VideoShowcase() {
             href="https://www.instagram.com/the_naach_company/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-medium tracking-wide text-pink-200/80 transition-colors hover:text-pink-100"
+            className="inline-flex items-center gap-2 text-sm font-medium tracking-wide text-tnc-gold-soft transition-colors hover:text-tnc-ivory"
           >
             More on Instagram
             <span aria-hidden>→</span>

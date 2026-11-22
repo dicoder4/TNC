@@ -24,7 +24,7 @@ const buttonItem = {
 
 const gradientText = {
   backgroundImage:
-    "linear-gradient(100deg, #ffd3ea 0%, #ff8fc7 30%, #f6c453 60%, #ffd3ea 100%)",
+    "linear-gradient(100deg, #0E393A 0%, #81153B 30%, #AD2451 55%, #0E393A 100%)",
   backgroundSize: "200% auto",
   WebkitBackgroundClip: "text",
   backgroundClip: "text",
@@ -34,36 +34,36 @@ const gradientText = {
 
 export default function Hero() {
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#08060a] px-6 py-28 text-center font-sans">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-tnc-ivory px-6 py-28 text-center font-sans">
       {/* ambient gradient glow */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 15% 15%, rgba(236,72,153,0.32), transparent 45%), radial-gradient(circle at 85% 20%, rgba(246,196,83,0.22), transparent 45%), radial-gradient(circle at 50% 100%, rgba(236,72,153,0.18), transparent 55%)",
+            "radial-gradient(circle at 15% 15%, rgba(173,36,81,0.12), transparent 45%), radial-gradient(circle at 85% 20%, rgba(207,159,66,0.18), transparent 45%), radial-gradient(circle at 50% 100%, rgba(14,57,58,0.08), transparent 55%)",
         }}
       />
 
       {/* drifting ambient orbs */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute left-[10%] top-[20%] h-72 w-72 rounded-full bg-pink-500/20 blur-[110px]"
+        className="pointer-events-none absolute left-[10%] top-[20%] h-72 w-72 rounded-full bg-tnc-pink/10 blur-[110px]"
         animate={{ y: [0, 24, 0], x: [0, 12, 0] }}
         transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute right-[12%] top-[32%] h-80 w-80 rounded-full bg-amber-400/15 blur-[120px]"
+        className="pointer-events-none absolute right-[12%] top-[32%] h-80 w-80 rounded-full bg-tnc-gold/20 blur-[120px]"
         animate={{ y: [0, -20, 0], x: [0, -14, 0] }}
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* fine grid texture */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
+        className="pointer-events-none absolute inset-0 opacity-[0.05]"
         style={{
           backgroundImage:
-            "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+            "linear-gradient(#0E393A 1px, transparent 1px), linear-gradient(90deg, #0E393A 1px, transparent 1px)",
           backgroundSize: "48px 48px",
         }}
       />
@@ -75,16 +75,16 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.85, filter: "blur(8px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 0.9, ease: easeOut }}
-          className="mb-8 h-36 w-36 rounded-full object-cover shadow-[0_0_60px_rgba(236,72,153,0.25)] ring-1 ring-amber-200/40 sm:h-44 sm:w-44"
+          className="mb-8 h-36 w-36 rounded-full object-cover shadow-[0_0_60px_rgba(207,159,66,0.35)] ring-1 ring-tnc-gold/60 sm:h-44 sm:w-44"
         />
 
         <motion.span
           initial={{ opacity: 0, y: -10, filter: "blur(6px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: easeOut }}
-          className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-pink-300/25 bg-white/[0.04] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.25em] text-pink-200/80 backdrop-blur-sm"
+          className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-tnc-gold/50 bg-white/40 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.25em] text-tnc-burgundy backdrop-blur-sm"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-pink-400 to-amber-300" />
+          <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-tnc-pink to-tnc-gold" />
           Worldwide · Wedding Choreography
         </motion.span>
 
@@ -119,7 +119,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ delay: 0.4, duration: 0.8, ease: easeOut }}
-          className="mt-7 max-w-xl text-base font-light leading-relaxed tracking-wide text-gray-300/85 sm:text-lg"
+          className="mt-7 max-w-xl text-base font-light leading-relaxed tracking-wide text-tnc-teal/80 sm:text-lg"
         >
           Sangeets, baraats, first dances, guest performances — we make sure
           your big day trends on the group chat before it even trends on
@@ -142,7 +142,7 @@ export default function Hero() {
                 .getElementById("availability")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="group relative overflow-hidden rounded-full bg-gradient-to-r from-pink-500 to-amber-400 px-8 py-3.5 text-sm font-semibold tracking-wide text-black shadow-[0_8px_30px_rgba(236,72,153,0.35)]"
+            className="group relative overflow-hidden rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-8 py-3.5 text-sm font-semibold tracking-wide text-tnc-ivory shadow-[0_8px_30px_rgba(173,36,81,0.3)]"
           >
             <span className="relative z-10">Book Your Choreo</span>
             <motion.span
@@ -165,7 +165,7 @@ export default function Hero() {
                 .getElementById("moves")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="group flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-8 py-3.5 text-sm font-semibold tracking-wide text-pink-50 backdrop-blur-md transition-colors hover:bg-white/10"
+            className="group flex items-center justify-center gap-2 rounded-full border border-tnc-teal/25 bg-white/40 px-8 py-3.5 text-sm font-semibold tracking-wide text-tnc-teal backdrop-blur-md transition-colors hover:bg-white/70"
           >
             See The Moves
             <motion.span
@@ -189,7 +189,7 @@ export default function Hero() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ delay: 1.2, duration: 0.7 }}
-          className="mt-16 inline-flex items-center gap-2 text-sm font-medium tracking-wide text-pink-200/80 transition-colors hover:text-pink-100"
+          className="mt-16 inline-flex items-center gap-2 text-sm font-medium tracking-wide text-tnc-pink transition-colors hover:text-tnc-burgundy"
         >
           <svg
             aria-hidden
@@ -205,13 +205,13 @@ export default function Hero() {
             <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none" />
           </svg>
           @the_naach_company
-          <span className="text-gray-500">· 450 followers</span>
+          <span className="text-tnc-teal/50">· 450 followers</span>
         </motion.a>
       </div>
 
       <motion.div
         aria-hidden
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-pink-200/40"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-tnc-gold"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: [0, 8, 0] }}
         transition={{

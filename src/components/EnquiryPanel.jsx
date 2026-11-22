@@ -18,7 +18,7 @@ import {
 const easeOut = [0.16, 1, 0.3, 1];
 
 const inputCls =
-  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-gray-500 outline-none transition-colors focus:border-pink-300/50";
+  "w-full rounded-xl border border-tnc-beige bg-white/60 px-3.5 py-2.5 text-sm text-tnc-teal placeholder:text-tnc-tan outline-none transition-colors focus:border-tnc-pink/60 focus:bg-white";
 
 function Chip({ active, onClick, children }) {
   return (
@@ -28,8 +28,8 @@ function Chip({ active, onClick, children }) {
       aria-pressed={active}
       className={`rounded-full border px-3 py-1.5 text-xs font-medium tracking-wide transition-colors ${
         active
-          ? "border-pink-300/60 bg-pink-500/20 text-pink-50"
-          : "border-white/10 bg-white/[0.03] text-gray-300 hover:border-white/25"
+          ? "border-tnc-pink bg-tnc-pink text-tnc-ivory"
+          : "border-tnc-beige bg-white/50 text-tnc-teal/80 hover:border-tnc-tan"
       }`}
     >
       {children}
@@ -39,7 +39,7 @@ function Chip({ active, onClick, children }) {
 
 function Label({ children }) {
   return (
-    <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-pink-200/70">
+    <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-tnc-pink">
       {children}
     </div>
   );
@@ -47,20 +47,20 @@ function Label({ children }) {
 
 function SelectionRow({ dot, label, value, onRemove, children }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-3">
+    <div className="rounded-xl border border-tnc-beige bg-white/50 px-3.5 py-3">
       <div className="flex items-start gap-3">
         <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${dot}`} />
         <div className="min-w-0 flex-1">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-500">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-tnc-tan">
             {label}
           </div>
-          <div className="mt-0.5 text-sm text-white">{value}</div>
+          <div className="mt-0.5 text-sm text-tnc-teal">{value}</div>
         </div>
         <button
           type="button"
           onClick={onRemove}
           aria-label={`Remove ${label}`}
-          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-white/10 hover:text-white"
+          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-tnc-tan transition-colors hover:bg-tnc-teal/5 hover:text-tnc-teal"
         >
           ×
         </button>
@@ -127,10 +127,10 @@ export default function EnquiryPanel({
   }
 
   return (
-    <div className="flex flex-col gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm sm:p-7">
+    <div className="flex flex-col gap-6 rounded-3xl border border-tnc-beige bg-tnc-ivory/85 p-5 shadow-[0_4px_30px_rgba(83,44,32,0.06)] backdrop-blur-sm sm:p-7">
       <div>
-        <h3 className="font-display text-xl italic text-white sm:text-2xl">Your enquiry</h3>
-        <p className="mt-1 text-xs text-gray-500">
+        <h3 className="font-display text-xl italic text-tnc-teal sm:text-2xl">Your enquiry</h3>
+        <p className="mt-1 text-xs text-tnc-teal/60">
           Pick any mix of dates on the calendar, add a few details, and send it to us.
         </p>
       </div>
@@ -138,14 +138,14 @@ export default function EnquiryPanel({
       {/* selected dates */}
       <div className="flex flex-col gap-2.5">
         {!ready && (
-          <div className="rounded-xl border border-dashed border-white/10 px-4 py-6 text-center text-sm text-gray-500">
+          <div className="rounded-xl border border-dashed border-tnc-tan/50 px-4 py-6 text-center text-sm text-tnc-teal/55">
             No dates picked yet. Choose a date type, then tap the calendar.
           </div>
         )}
         {eventDates.map((key) => (
           <SelectionRow
             key={key}
-            dot="bg-amber-400"
+            dot="bg-tnc-gold"
             label="Event date"
             value={formatKey(key)}
             onRemove={() => onRemoveEventDate(key)}
@@ -153,7 +153,7 @@ export default function EnquiryPanel({
         ))}
         {sessions.start && (
           <SelectionRow
-            dot="bg-pink-500"
+            dot="bg-tnc-pink"
             label="Choreo sessions"
             value={
               sessions.end
@@ -165,7 +165,7 @@ export default function EnquiryPanel({
         )}
         {consult.date && (
           <SelectionRow
-            dot="bg-violet-400"
+            dot="bg-tnc-teal"
             label="Consultation call"
             value={formatKey(consult.date)}
             onRemove={onClearConsult}
@@ -251,7 +251,7 @@ export default function EnquiryPanel({
         <button
           type="button"
           onClick={() => setShowPreview((s) => !s)}
-          className="text-xs font-medium tracking-wide text-pink-200/80 transition-colors hover:text-pink-100"
+          className="text-xs font-medium tracking-wide text-tnc-pink transition-colors hover:text-tnc-burgundy"
         >
           {showPreview ? "Hide message preview" : "Preview message"}
         </button>
@@ -262,7 +262,7 @@ export default function EnquiryPanel({
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.35, ease: easeOut }}
-              className="mt-3 overflow-hidden whitespace-pre-wrap rounded-xl border border-white/10 bg-black/30 p-4 font-sans text-xs leading-relaxed text-gray-300 select-all"
+              className="mt-3 overflow-hidden whitespace-pre-wrap rounded-xl border border-tnc-beige bg-white/70 p-4 font-sans text-xs leading-relaxed text-tnc-teal/85 select-all"
             >
               {message}
             </motion.pre>
@@ -276,7 +276,7 @@ export default function EnquiryPanel({
           type="button"
           disabled={!ready}
           onClick={sendInstagram}
-          className="rounded-full bg-gradient-to-r from-pink-500 to-amber-400 px-6 py-3 text-sm font-semibold tracking-wide text-black shadow-[0_8px_30px_rgba(236,72,153,0.3)] transition-opacity disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+          className="rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-6 py-3 text-sm font-semibold tracking-wide text-tnc-ivory shadow-[0_8px_30px_rgba(173,36,81,0.25)] transition-opacity disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
         >
           {ready ? "Copy message & open Instagram DM" : "Pick a date to continue"}
         </button>
@@ -285,7 +285,7 @@ export default function EnquiryPanel({
             type="button"
             disabled={!ready}
             onClick={copyOnly}
-            className="flex-1 rounded-full border border-white/15 px-4 py-2.5 text-xs font-semibold tracking-wide text-pink-50 transition-colors hover:bg-white/10 disabled:opacity-40"
+            className="flex-1 rounded-full border border-tnc-teal/25 px-4 py-2.5 text-xs font-semibold tracking-wide text-tnc-teal transition-colors hover:bg-tnc-teal/5 disabled:opacity-40"
           >
             Copy message
           </button>
@@ -296,7 +296,7 @@ export default function EnquiryPanel({
               rel="noopener noreferrer"
               aria-disabled={!ready}
               onClick={() => notify("WhatsApp")}
-              className={`flex-1 rounded-full border border-emerald-400/30 px-4 py-2.5 text-center text-xs font-semibold tracking-wide text-emerald-200 transition-colors hover:bg-emerald-400/10 ${
+              className={`flex-1 rounded-full border border-emerald-700/30 px-4 py-2.5 text-center text-xs font-semibold tracking-wide text-emerald-800 transition-colors hover:bg-emerald-700/10 ${
                 ready ? "" : "pointer-events-none opacity-40"
               }`}
             >
@@ -307,18 +307,18 @@ export default function EnquiryPanel({
 
         <div className="min-h-[2.5rem] text-center text-xs leading-relaxed" aria-live="polite">
           {status === "copied" && (
-            <span className="text-emerald-300">
+            <span className="text-emerald-800">
               Message copied. In the Instagram chat, long-press the message box, tap{" "}
               <strong>Paste</strong> and send.
             </span>
           )}
           {status === "failed" && (
-            <span className="text-amber-300">
+            <span className="text-tnc-burgundy">
               Couldn&apos;t copy automatically. Select the message above and copy it.
             </span>
           )}
           {status === null && ready && (
-            <span className="text-gray-500">
+            <span className="text-tnc-teal/55">
               Instagram doesn&apos;t let websites fill in DMs, so we copy your message
               for you. Just paste it in the chat.
             </span>

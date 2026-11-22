@@ -25,7 +25,7 @@ export default function VideoCard({ src, poster, index }) {
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.6, delay: (index % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
       whileHover={{ scale: 1.02 }}
-      className="group relative aspect-[9/16] overflow-hidden rounded-2xl border border-white/10 bg-white/5"
+      className="group relative aspect-[9/16] overflow-hidden rounded-2xl border border-tnc-gold/25 bg-tnc-teal-deep"
     >
       <video
         ref={videoRef}
@@ -37,11 +37,11 @@ export default function VideoCard({ src, poster, index }) {
         preload="metadata"
         className="h-full w-full object-cover"
       />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-tnc-teal-deep/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <button
         type="button"
         onClick={() => setMuted((m) => !m)}
-        className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100"
+        className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-tnc-teal/70 text-tnc-ivory opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100"
         aria-label={muted ? "Unmute video" : "Mute video"}
       >
         {muted ? (

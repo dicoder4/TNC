@@ -18,10 +18,10 @@ function PersonLink({ person }) {
       href={`https://www.instagram.com/${person.handle}/`}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-2 text-sm text-gray-300 transition-colors hover:text-pink-100"
+      className="group flex items-center gap-2 text-sm text-tnc-teal transition-colors hover:text-tnc-burgundy"
     >
       <span className="font-medium tracking-wide">{person.name}</span>
-      <span className="text-pink-200/60 transition-colors group-hover:text-pink-200">
+      <span className="text-tnc-pink/80 transition-colors group-hover:text-tnc-pink">
         @{person.handle}
       </span>
     </a>
@@ -32,12 +32,12 @@ const easeOut = [0.16, 1, 0.3, 1];
 
 export default function About() {
   return (
-    <section id="about" className="relative overflow-hidden bg-[#0b0810] px-6 py-28">
+    <section id="about" className="relative overflow-hidden bg-tnc-ivory px-6 py-28">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 80% 20%, rgba(246,196,83,0.12), transparent 50%)",
+            "radial-gradient(circle at 80% 20%, rgba(207,159,66,0.16), transparent 50%)",
         }}
       />
 
@@ -47,7 +47,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.6, ease: easeOut }}
-          className="mb-4 inline-block text-[11px] font-medium uppercase tracking-[0.25em] text-pink-200/70"
+          className="mb-4 inline-block text-[11px] font-medium uppercase tracking-[0.25em] text-tnc-pink"
         >
           Who We Are
         </motion.span>
@@ -57,7 +57,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.7, ease: easeOut }}
-          className="font-display text-2xl italic leading-snug text-white sm:text-3xl"
+          className="font-display text-2xl italic leading-snug text-tnc-teal sm:text-3xl"
         >
           Weddings, sangeets &amp; special events — choreographed for couples and
           families around the world, in person or online.
@@ -68,7 +68,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
-          className="mt-4 text-sm text-gray-400"
+          className="mt-4 text-sm text-tnc-teal/70"
         >
           Wherever you are, we also run choreography sessions over video call.
         </motion.p>
@@ -80,7 +80,7 @@ export default function About() {
           transition={{ duration: 0.7, delay: 0.15, ease: easeOut }}
           className="mt-14"
         >
-          <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-pink-200/70">
+          <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-tnc-pink">
             Founders
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-10">
@@ -89,7 +89,7 @@ export default function About() {
             ))}
           </div>
 
-          <p className="mb-4 mt-12 text-[11px] font-medium uppercase tracking-[0.25em] text-pink-200/70">
+          <p className="mb-4 mt-12 text-[11px] font-medium uppercase tracking-[0.25em] text-tnc-pink">
             The Team
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap sm:gap-x-10 sm:gap-y-4">
