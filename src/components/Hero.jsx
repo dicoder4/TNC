@@ -32,195 +32,156 @@ const gradientText = {
   color: "transparent",
 };
 
+// Fades the artwork's square edges into the page background.
+const softEdges = {
+  WebkitMaskImage: "radial-gradient(closest-side, #000 94%, transparent 100%)",
+  maskImage: "radial-gradient(closest-side, #000 94%, transparent 100%)",
+};
+
 export default function Hero() {
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-tnc-ivory px-6 py-28 text-center font-sans">
-      {/* ambient gradient glow */}
+    <section className="relative flex min-h-screen items-center overflow-hidden bg-[#FDF5E2] px-6 pb-16 pt-28 font-sans lg:py-28">
+      {/* warm ambient glow */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 15% 15%, rgba(173,36,81,0.12), transparent 45%), radial-gradient(circle at 85% 20%, rgba(207,159,66,0.18), transparent 45%), radial-gradient(circle at 50% 100%, rgba(14,57,58,0.08), transparent 55%)",
+            "radial-gradient(circle at 25% 45%, rgba(207,159,66,0.16), transparent 45%), radial-gradient(circle at 90% 85%, rgba(173,36,81,0.08), transparent 40%)",
         }}
       />
 
-      {/* drifting ambient orbs */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute left-[10%] top-[20%] h-72 w-72 rounded-full bg-tnc-pink/10 blur-[110px]"
-        animate={{ y: [0, 24, 0], x: [0, 12, 0] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute right-[12%] top-[32%] h-80 w-80 rounded-full bg-tnc-gold/20 blur-[120px]"
-        animate={{ y: [0, -20, 0], x: [0, -14, 0] }}
-        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* fine grid texture */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "linear-gradient(#0E393A 1px, transparent 1px), linear-gradient(90deg, #0E393A 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-        }}
-      />
-
-      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center">
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
+        {/* artwork */}
         <motion.img
-          src="/tnc-logo.jpg"
-          alt="The Naach Company logo"
-          initial={{ opacity: 0, scale: 0.85, filter: "blur(8px)" }}
+          src="/hero-art.jpg"
+          alt="The Naach Company — founders Vidhi and Piyush with illustrated wedding dancers"
+          initial={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          transition={{ duration: 0.9, ease: easeOut }}
-          className="mb-8 h-36 w-36 rounded-full object-cover shadow-[0_0_60px_rgba(207,159,66,0.35)] ring-1 ring-tnc-gold/60 sm:h-44 sm:w-44"
+          transition={{ duration: 1, ease: easeOut }}
+          style={softEdges}
+          className="mx-auto aspect-square w-full max-w-[min(92vw,560px)] object-contain"
         />
 
-        <motion.span
-          initial={{ opacity: 0, y: -10, filter: "blur(6px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.7, ease: easeOut }}
-          className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-tnc-gold/50 bg-white/40 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.25em] text-tnc-burgundy backdrop-blur-sm"
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-tnc-pink to-tnc-gold" />
-          Worldwide · Wedding Choreography
-        </motion.span>
-
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.82, y: 16, filter: "blur(10px)" }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            filter: "blur(0px)",
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-          }}
-          transition={{
-            opacity: { type: "spring", bounce: 0.4, duration: 1 },
-            scale: { type: "spring", bounce: 0.4, duration: 1 },
-            y: { type: "spring", bounce: 0.4, duration: 1 },
-            filter: { duration: 0.8, ease: easeOut },
-            backgroundPosition: {
-              duration: 7,
-              repeat: Infinity,
-              ease: "linear",
-              delay: 1,
-            },
-          }}
-          style={gradientText}
-          className="font-display text-4xl italic leading-[1.15] tracking-tight sm:text-5xl md:text-[3.75rem]"
-        >
-          Bengaluru&apos;s go-to for wedding choreo that actually slaps.
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ delay: 0.4, duration: 0.8, ease: easeOut }}
-          className="mt-7 max-w-xl text-base font-light leading-relaxed tracking-wide text-tnc-teal/80 sm:text-lg"
-        >
-          Sangeets, baraats, first dances, guest performances — we make sure
-          your big day trends on the group chat before it even trends on
-          Instagram.
-        </motion.p>
-
-        <motion.div
-          variants={buttonContainer}
-          initial="hidden"
-          animate="show"
-          className="mt-11 flex flex-col gap-4 sm:flex-row"
-        >
-          <motion.button
-            variants={buttonItem}
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            onClick={() =>
-              document
-                .getElementById("availability")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="group relative overflow-hidden rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-8 py-3.5 text-sm font-semibold tracking-wide text-tnc-ivory shadow-[0_8px_30px_rgba(173,36,81,0.3)]"
+        {/* copy */}
+        <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+          <motion.span
+            initial={{ opacity: 0, y: -10, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.7, delay: 0.3, ease: easeOut }}
+            className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-tnc-gold/50 bg-white/50 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.25em] text-tnc-burgundy"
           >
-            <span className="relative z-10">Book Your Choreo</span>
-            <motion.span
-              aria-hidden
-              className="absolute inset-0 -translate-x-full bg-white/30"
-              style={{ skewX: -20 }}
-              initial={false}
-              whileHover={{ translateX: "150%" }}
-              transition={{ duration: 0.6, ease: easeOut }}
-            />
-          </motion.button>
+            <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-tnc-pink to-tnc-gold" />
+            Worldwide · Wedding Choreography
+          </motion.span>
 
-          <motion.button
-            variants={buttonItem}
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            onClick={() =>
-              document
-                .getElementById("moves")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="group flex items-center justify-center gap-2 rounded-full border border-tnc-teal/25 bg-white/40 px-8 py-3.5 text-sm font-semibold tracking-wide text-tnc-teal backdrop-blur-md transition-colors hover:bg-white/70"
+          <motion.h1
+            initial={{ opacity: 0, y: 16, filter: "blur(10px)" }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              filter: "blur(0px)",
+              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+            }}
+            transition={{
+              opacity: { duration: 0.8, delay: 0.4, ease: easeOut },
+              y: { duration: 0.8, delay: 0.4, ease: easeOut },
+              filter: { duration: 0.8, delay: 0.4, ease: easeOut },
+              backgroundPosition: {
+                duration: 7,
+                repeat: Infinity,
+                ease: "linear",
+                delay: 1.2,
+              },
+            }}
+            style={gradientText}
+            className="font-display text-4xl italic leading-[1.15] tracking-tight sm:text-5xl lg:text-[3.4rem]"
           >
-            See The Moves
-            <motion.span
-              aria-hidden
-              className="inline-block"
-              initial={{ x: 0 }}
-              whileHover={{ x: 4 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+            Bengaluru&apos;s go-to for wedding choreo that actually slaps.
+          </motion.h1>
+
+          <motion.div
+            variants={buttonContainer}
+            initial="hidden"
+            animate="show"
+            className="mt-10 flex flex-col gap-4 sm:flex-row"
+          >
+            <motion.button
+              variants={buttonItem}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              onClick={() =>
+                document
+                  .getElementById("availability")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="group relative overflow-hidden rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-8 py-3.5 text-sm font-semibold tracking-wide text-tnc-ivory shadow-[0_8px_30px_rgba(173,36,81,0.3)]"
             >
-              →
-            </motion.span>
-          </motion.button>
-        </motion.div>
+              <span className="relative z-10">Book Your Choreo</span>
+              <motion.span
+                aria-hidden
+                className="absolute inset-0 -translate-x-full bg-white/30"
+                style={{ skewX: -20 }}
+                initial={false}
+                whileHover={{ translateX: "150%" }}
+                transition={{ duration: 0.6, ease: easeOut }}
+              />
+            </motion.button>
 
-        <motion.a
-          href="https://www.instagram.com/the_naach_company/"
-          target="_blank"
-          rel="noopener noreferrer"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ delay: 1.2, duration: 0.7 }}
-          className="mt-16 inline-flex items-center gap-2 text-sm font-medium tracking-wide text-tnc-pink transition-colors hover:text-tnc-burgundy"
-        >
-          <svg
-            aria-hidden
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
+            <motion.button
+              variants={buttonItem}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              onClick={() =>
+                document
+                  .getElementById("moves")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="group flex items-center justify-center gap-2 rounded-full border border-tnc-teal/25 bg-white/50 px-8 py-3.5 text-sm font-semibold tracking-wide text-tnc-teal transition-colors hover:bg-white/80"
+            >
+              See The Moves
+              <motion.span
+                aria-hidden
+                className="inline-block"
+                initial={{ x: 0 }}
+                whileHover={{ x: 4 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+              >
+                →
+              </motion.span>
+            </motion.button>
+          </motion.div>
+
+          <motion.a
+            href="https://www.instagram.com/the_naach_company/"
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ delay: 1.2, duration: 0.7 }}
+            className="mt-10 inline-flex items-center gap-2 text-sm font-medium tracking-wide text-tnc-pink transition-colors hover:text-tnc-burgundy"
           >
-            <rect x="2" y="2" width="20" height="20" rx="5" />
-            <circle cx="12" cy="12" r="4.2" />
-            <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none" />
-          </svg>
-          @the_naach_company
-          <span className="text-tnc-teal/50">· 450 followers</span>
-        </motion.a>
+            <svg
+              aria-hidden
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <circle cx="12" cy="12" r="4.2" />
+              <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none" />
+            </svg>
+            @the_naach_company
+            <span className="text-tnc-teal/50">· 450 followers</span>
+          </motion.a>
+        </div>
       </div>
-
-      <motion.div
-        aria-hidden
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-tnc-gold"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 8, 0] }}
-        transition={{
-          opacity: { delay: 1.4, duration: 0.6 },
-          y: { delay: 1.4, duration: 1.8, repeat: Infinity, ease: "easeInOut" },
-        }}
-      >
-        ↓
-      </motion.div>
     </section>
   );
 }
