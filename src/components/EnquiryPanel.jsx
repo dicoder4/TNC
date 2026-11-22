@@ -20,6 +20,13 @@ const easeOut = [0.16, 1, 0.3, 1];
 const inputCls =
   "w-full rounded-xl border border-tnc-beige bg-white/60 px-3.5 py-2.5 text-sm text-tnc-teal placeholder:text-tnc-tan outline-none transition-colors focus:border-tnc-pink/60 focus:bg-white";
 
+const reveal = {
+  initial: { opacity: 0, height: 0 },
+  animate: { opacity: 1, height: "auto" },
+  exit: { opacity: 0, height: 0 },
+  transition: { duration: 0.35, ease: easeOut },
+};
+
 function Chip({ active, onClick, children }) {
   return (
     <button
@@ -37,9 +44,15 @@ function Chip({ active, onClick, children }) {
   );
 }
 
-function Label({ children }) {
+function Step({ n, title, children }) {
   return (
-    <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-tnc-pink">
+    <div>
+      <div className="mb-3 flex items-center gap-2.5">
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-tnc-teal text-[10px] font-semibold text-tnc-ivory">
+          {n}
+        </span>
+        <span className="text-sm font-semibold text-tnc-teal">{title}</span>
+      </div>
       {children}
     </div>
   );
@@ -47,14 +60,12 @@ function Label({ children }) {
 
 function SelectionRow({ dot, label, value, onRemove, children }) {
   return (
-    <div className="rounded-xl border border-tnc-beige bg-white/50 px-3.5 py-3">
-      <div className="flex items-start gap-3">
-        <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${dot}`} />
-        <div className="min-w-0 flex-1">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-tnc-tan">
-            {label}
-          </div>
-          <div className="mt-0.5 text-sm text-tnc-teal">{value}</div>
+    <div className="rounded-xl bg-white/60 px-3.5 py-2.5">
+      <div className="flex items-center gap-3">
+        <span className={`h-2 w-2 shrink-0 rounded-full ${dot}`} />
+        <div className="min-w-0 flex-1 text-sm">
+          <span className="text-tnc-teal/55">{label}</span>{" "}
+          <span className="font-medium text-tnc-teal">{value}</span>
         </div>
         <button
           type="button"
@@ -85,6 +96,7 @@ export default function EnquiryPanel({
 }) {
   const [status, setStatus] = useState(null); // null | "copied" | "failed"
   const [showPreview, setShowPreview] = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   const selection = { eventDates, sessions, consult };
   const ready = hasAnyDate(selection) || details.early;
@@ -100,6 +112,9 @@ export default function EnquiryPanel({
         ? details[field].filter((x) => x !== value)
         : [...details[field], value]
     );
+
+  const extrasCount =
+    details.occasions.length + details.performances.length + (details.notes.trim() ? 1 : 0);
 
   // Email/log each distinct enquiry once, whichever button the customer uses.
   const lastNotified = useRef(null);
@@ -130,87 +145,93 @@ export default function EnquiryPanel({
     });
   }
 
+  const linkCls =
+    "font-medium text-tnc-teal/70 underline decoration-tnc-teal/20 underline-offset-4 transition-colors hover:text-tnc-teal hover:decoration-tnc-teal disabled:pointer-events-none disabled:opacity-40";
+
   return (
-    <div id="enquiry-panel" className="flex scroll-mt-24 flex-col gap-6 rounded-3xl border border-tnc-beige bg-tnc-ivory/85 p-5 shadow-[0_4px_30px_rgba(83,44,32,0.06)] backdrop-blur-sm sm:p-7">
-      <div>
-        <h3 className="font-display text-xl italic text-tnc-teal sm:text-2xl">Your enquiry</h3>
-        <p className="mt-1 text-xs text-tnc-teal/60">
-          Pick any mix of dates on the calendar, add a few details, and send it to us.
-        </p>
-      </div>
+    <div
+      id="enquiry-panel"
+      className="flex scroll-mt-24 flex-col gap-7 rounded-3xl border border-tnc-beige bg-tnc-ivory/85 p-5 shadow-[0_4px_30px_rgba(83,44,32,0.06)] backdrop-blur-sm sm:p-7"
+    >
+      <h3 className="font-display text-xl italic text-tnc-teal sm:text-2xl">Your enquiry</h3>
 
-      {/* selected dates */}
-      <div className="flex flex-col gap-2.5">
-        {!ready && (
-          <div className="rounded-xl border border-dashed border-tnc-tan/50 px-4 py-6 text-center text-sm text-tnc-teal/55">
-            No dates picked yet. Choose a date type, then tap the calendar.
-            <button
-              type="button"
-              onClick={() => onDetailsChange({ ...details, early: true })}
-              className="mt-2 block w-full text-xs font-medium text-tnc-burgundy underline decoration-tnc-burgundy/30 underline-offset-4 hover:decoration-tnc-burgundy"
-            >
-              Celebrating before {bookingStartLabel}? Say hello anyway
-            </button>
-          </div>
-        )}
-        {details.early && (
-          <SelectionRow
-            dot="bg-tnc-burgundy"
-            label={`Event before ${bookingStartLabel}`}
-            value="We'd love to help you find the right choreographer for your day."
-            onRemove={() => onDetailsChange({ ...details, early: false, earlyDate: "" })}
-          >
-            <input
-              className={`${inputCls} mt-3`}
-              placeholder="Your event date, e.g. 14 Feb 2027"
-              value={details.earlyDate}
-              onChange={(e) => set("earlyDate")(e.target.value)}
-              aria-label="Your event date"
-            />
-          </SelectionRow>
-        )}
-        {eventDates.map((key) => (
-          <SelectionRow
-            key={key}
-            dot="bg-tnc-gold"
-            label="Event date"
-            value={formatKey(key)}
-            onRemove={() => onRemoveEventDate(key)}
-          />
-        ))}
-        {sessions.start && (
-          <SelectionRow
-            dot="bg-tnc-pink"
-            label="Choreo sessions"
-            value={
-              sessions.end
-                ? `${formatKey(sessions.start)} → ${formatKey(sessions.end)} · ${daysInclusive(sessions.start, sessions.end)} days`
-                : `From ${formatKey(sessions.start)}. Tap an end date.`
-            }
-            onRemove={onClearSessions}
-          />
-        )}
-        {consult.date && (
-          <SelectionRow
-            dot="bg-tnc-teal"
-            label="Consultation call"
-            value={formatKey(consult.date)}
-            onRemove={onClearConsult}
-          >
-            <div className="mt-3 flex flex-wrap gap-1.5 pl-5">
-              {TIME_PREFS.map((t) => (
-                <Chip key={t} active={consult.time === t} onClick={() => onConsultTimeChange(t)}>
-                  {t}
-                </Chip>
-              ))}
+      {/* 1 · dates */}
+      <Step n={1} title="Your dates">
+        <div className="flex flex-col gap-2">
+          {!ready && (
+            <div className="rounded-xl border border-dashed border-tnc-tan/50 px-4 py-5 text-center text-sm text-tnc-teal/55">
+              Tap a date on the calendar to start.
+              <button
+                type="button"
+                onClick={() => onDetailsChange({ ...details, early: true })}
+                className="mt-1.5 block w-full text-xs font-medium text-tnc-burgundy underline decoration-tnc-burgundy/30 underline-offset-4 hover:decoration-tnc-burgundy"
+              >
+                Celebrating before {bookingStartLabel}?
+              </button>
             </div>
-          </SelectionRow>
-        )}
-      </div>
+          )}
+          {details.early && (
+            <SelectionRow
+              dot="bg-tnc-burgundy"
+              label="Event before"
+              value={bookingStartLabel}
+              onRemove={() => onDetailsChange({ ...details, early: false, earlyDate: "" })}
+            >
+              <p className="mt-2 pl-5 text-xs text-tnc-teal/60">
+                We&apos;re booked, but we&apos;ll happily recommend choreographers we trust.
+              </p>
+              <input
+                className={`${inputCls} mt-2`}
+                placeholder="Your event date, e.g. 14 Feb 2027"
+                value={details.earlyDate}
+                onChange={(e) => set("earlyDate")(e.target.value)}
+                aria-label="Your event date"
+              />
+            </SelectionRow>
+          )}
+          {eventDates.map((key) => (
+            <SelectionRow
+              key={key}
+              dot="bg-tnc-gold"
+              label="Event"
+              value={formatKey(key)}
+              onRemove={() => onRemoveEventDate(key)}
+            />
+          ))}
+          {sessions.start && (
+            <SelectionRow
+              dot="bg-tnc-pink"
+              label="Rehearsals"
+              value={
+                sessions.end
+                  ? `${formatKey(sessions.start)} → ${formatKey(sessions.end)} (${daysInclusive(sessions.start, sessions.end)} days)`
+                  : `from ${formatKey(sessions.start)}…`
+              }
+              onRemove={onClearSessions}
+            />
+          )}
+          {consult.date && (
+            <SelectionRow
+              dot="bg-tnc-teal"
+              label="Intro call"
+              value={formatKey(consult.date)}
+              onRemove={onClearConsult}
+            >
+              <div className="mt-2.5 flex flex-wrap gap-1.5 pl-5">
+                {TIME_PREFS.map((t) => (
+                  <Chip key={t} active={consult.time === t} onClick={() => onConsultTimeChange(t)}>
+                    {t}
+                  </Chip>
+                ))}
+              </div>
+            </SelectionRow>
+          )}
+        </div>
+      </Step>
 
-      {/* details */}
-      <div className="flex flex-col gap-5">
-        <div className="grid gap-3 sm:grid-cols-2">
+      {/* 2 · about you */}
+      <Step n={2} title="About you">
+        <div className="grid gap-2.5 sm:grid-cols-2">
           <input
             className={inputCls}
             placeholder="Your name"
@@ -220,7 +241,7 @@ export default function EnquiryPanel({
           />
           <input
             className={inputCls}
-            placeholder="Phone or email, so we can reply"
+            placeholder="Phone or email"
             value={details.contact}
             onChange={(e) => set("contact")(e.target.value)}
             aria-label="Phone or email"
@@ -234,88 +255,81 @@ export default function EnquiryPanel({
           />
         </div>
 
-        <div>
-          <Label>Occasions · pick all that apply</Label>
-          <div className="flex flex-wrap gap-1.5">
-            {OCCASIONS.map((o) => (
-              <Chip
-                key={o}
-                active={details.occasions.includes(o)}
-                onClick={() => toggle("occasions", o)}
-              >
-                {o}
-              </Chip>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <Label>Looking for · pick all that apply</Label>
-          <div className="flex flex-wrap gap-1.5">
-            {PERFORMANCES.map((p) => (
-              <Chip
-                key={p}
-                active={details.performances.includes(p)}
-                onClick={() => toggle("performances", p)}
-              >
-                {p}
-              </Chip>
-            ))}
-          </div>
-        </div>
-
-        <textarea
-          className={`${inputCls} min-h-[84px] resize-y`}
-          placeholder="Anything else? Songs, number of people, venue…"
-          value={details.notes}
-          onChange={(e) => set("notes")(e.target.value)}
-          aria-label="Notes"
-        />
-      </div>
-
-      {/* preview */}
-      <div>
         <button
           type="button"
-          onClick={() => setShowPreview((s) => !s)}
-          className="text-xs font-medium tracking-wide text-tnc-pink transition-colors hover:text-tnc-burgundy"
+          onClick={() => setShowMore((s) => !s)}
+          aria-expanded={showMore}
+          className="mt-3 flex items-center gap-1.5 text-xs font-medium text-tnc-pink transition-colors hover:text-tnc-burgundy"
         >
-          {showPreview ? "Hide message preview" : "Preview message"}
+          <span
+            aria-hidden
+            className={`inline-block transition-transform ${showMore ? "rotate-45" : ""}`}
+          >
+            +
+          </span>
+          {showMore ? "Fewer details" : "Add occasion, songs & more"}
+          <span className="text-tnc-teal/45">
+            {extrasCount > 0 && !showMore ? `(${extrasCount} added)` : "(optional)"}
+          </span>
         </button>
+
         <AnimatePresence initial={false}>
-          {showPreview && (
-            <motion.pre
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.35, ease: easeOut }}
-              className="mt-3 overflow-hidden whitespace-pre-wrap rounded-xl border border-tnc-beige bg-white/70 p-4 font-sans text-xs leading-relaxed text-tnc-teal/85 select-all"
-            >
-              {message}
-            </motion.pre>
+          {showMore && (
+            <motion.div {...reveal} className="overflow-hidden">
+              <div className="flex flex-col gap-4 pt-4">
+                <div>
+                  <div className="mb-2 text-xs text-tnc-teal/60">Occasion</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {OCCASIONS.map((o) => (
+                      <Chip
+                        key={o}
+                        active={details.occasions.includes(o)}
+                        onClick={() => toggle("occasions", o)}
+                      >
+                        {o}
+                      </Chip>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="mb-2 text-xs text-tnc-teal/60">Looking for</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {PERFORMANCES.map((p) => (
+                      <Chip
+                        key={p}
+                        active={details.performances.includes(p)}
+                        onClick={() => toggle("performances", p)}
+                      >
+                        {p}
+                      </Chip>
+                    ))}
+                  </div>
+                </div>
+                <textarea
+                  className={`${inputCls} min-h-[80px] resize-y`}
+                  placeholder="Songs, number of people, venue…"
+                  value={details.notes}
+                  onChange={(e) => set("notes")(e.target.value)}
+                  aria-label="Notes"
+                />
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </Step>
 
-      {/* actions */}
-      <div className="flex flex-col gap-3">
+      {/* 3 · send */}
+      <Step n={3} title="Send it to us">
         <button
           type="button"
           disabled={!ready}
           onClick={sendInstagram}
-          className="rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-6 py-3 text-sm font-semibold tracking-wide text-tnc-ivory shadow-[0_8px_30px_rgba(173,36,81,0.25)] transition-opacity disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+          className="w-full rounded-full bg-gradient-to-r from-tnc-pink to-tnc-burgundy px-6 py-3 text-sm font-semibold tracking-wide text-tnc-ivory shadow-[0_8px_30px_rgba(173,36,81,0.25)] transition-opacity disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
         >
-          {ready ? "Copy message & open Instagram DM" : "Pick a date to continue"}
+          {ready ? "Send on Instagram" : "Pick a date first"}
         </button>
-        <div className="flex gap-3">
-          <button
-            type="button"
-            disabled={!ready}
-            onClick={copyOnly}
-            className="flex-1 rounded-full border border-tnc-teal/25 px-4 py-2.5 text-xs font-semibold tracking-wide text-tnc-teal transition-colors hover:bg-tnc-teal/5 disabled:opacity-40"
-          >
-            Copy message
-          </button>
+
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs">
           {whatsappUrl && (
             <a
               href={ready ? whatsappUrl(message) : undefined}
@@ -323,35 +337,53 @@ export default function EnquiryPanel({
               rel="noopener noreferrer"
               aria-disabled={!ready}
               onClick={() => notify("WhatsApp")}
-              className={`flex-1 rounded-full border border-emerald-700/30 px-4 py-2.5 text-center text-xs font-semibold tracking-wide text-emerald-800 transition-colors hover:bg-emerald-700/10 ${
-                ready ? "" : "pointer-events-none opacity-40"
-              }`}
+              className={`${linkCls} ${ready ? "" : "pointer-events-none opacity-40"}`}
             >
-              Send on WhatsApp
+              WhatsApp instead
             </a>
           )}
+          <button type="button" disabled={!ready} onClick={copyOnly} className={linkCls}>
+            Copy message
+          </button>
+          <button
+            type="button"
+            disabled={!ready}
+            onClick={() => setShowPreview((s) => !s)}
+            className={linkCls}
+          >
+            {showPreview ? "Hide preview" : "Preview"}
+          </button>
         </div>
 
-        <div className="min-h-[2.5rem] text-center text-xs leading-relaxed" aria-live="polite">
+        <AnimatePresence initial={false}>
+          {showPreview && (
+            <motion.pre
+              {...reveal}
+              className="mt-3 overflow-hidden whitespace-pre-wrap rounded-xl bg-white/70 p-4 font-sans text-xs leading-relaxed text-tnc-teal/85 select-all"
+            >
+              {message}
+            </motion.pre>
+          )}
+        </AnimatePresence>
+
+        <div className="mt-3 min-h-[1.25rem] text-center text-xs leading-relaxed" aria-live="polite">
           {status === "copied" && (
             <span className="text-emerald-800">
-              Message copied. In the Instagram chat, long-press the message box, tap{" "}
-              <strong>Paste</strong> and send.
+              Copied! Just paste it in the chat and hit send.
             </span>
           )}
           {status === "failed" && (
             <span className="text-tnc-burgundy">
-              Couldn&apos;t copy automatically. Select the message above and copy it.
+              Couldn&apos;t copy automatically. Select the preview above and copy it.
             </span>
           )}
           {status === null && ready && (
-            <span className="text-tnc-teal/55">
-              Instagram doesn&apos;t let websites fill in DMs, so we copy your message
-              for you. Just paste it in the chat.
+            <span className="text-tnc-teal/50">
+              We&apos;ll copy your message so you can paste it in our DMs.
             </span>
           )}
         </div>
-      </div>
+      </Step>
     </div>
   );
 }

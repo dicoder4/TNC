@@ -99,7 +99,6 @@ export function buildMessage({ details, eventDates, sessions, consult, bookedUnt
   lines.push(...dateLines({ eventDates, sessions, consult }));
 
   if (details.notes.trim()) lines.push("", `Notes: ${details.notes.trim()}`);
-  lines.push("", "(Sent from the TNC website)");
   return lines.join("\n");
 }
 
