@@ -26,8 +26,13 @@ export default function Navbar() {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="font-display text-lg italic tracking-tight text-white"
+          className="flex items-center gap-3 font-display text-lg italic tracking-tight text-white"
         >
+          <img
+            src="/tnc-logo.jpg"
+            alt=""
+            className="h-10 w-10 rounded-full object-cover ring-1 ring-amber-200/40"
+          />
           The Naach Company
         </a>
 

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import VideoCard from "./VideoCard";
 
 const videos = [
+  "face-off-sangeet.mp4",
   "Video-32645.mp4",
   "Video-35093.mp4",
   "Video-38419.mp4",

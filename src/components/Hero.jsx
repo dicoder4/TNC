@@ -69,6 +69,15 @@ export default function Hero() {
       />
 
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center">
+        <motion.img
+          src="/tnc-logo.jpg"
+          alt="The Naach Company logo"
+          initial={{ opacity: 0, scale: 0.85, filter: "blur(8px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{ duration: 0.9, ease: easeOut }}
+          className="mb-8 h-36 w-36 rounded-full object-cover shadow-[0_0_60px_rgba(236,72,153,0.25)] ring-1 ring-amber-200/40 sm:h-44 sm:w-44"
+        />
+
         <motion.span
           initial={{ opacity: 0, y: -10, filter: "blur(6px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}

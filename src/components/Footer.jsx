@@ -19,6 +19,12 @@ export default function Footer() {
           DM us on Instagram to book
         </motion.a>
 
+        <img
+          src="/tnc-logo.jpg"
+          alt="The Naach Company logo"
+          className="h-28 w-28 rounded-full object-cover shadow-[0_0_40px_rgba(246,196,83,0.15)] ring-1 ring-amber-200/30"
+        />
+
         <div className="font-display text-xl italic text-white">
           The Naach Company
         </div>
