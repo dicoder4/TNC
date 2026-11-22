@@ -37,3 +37,34 @@ the section.
 Add an event on that date. **All-day events default to "Free" in Google
 Calendar** — set *Show as* → **Busy**, otherwise the date stays open on the site.
 Timed events are Busy by default. Any busy event on a day marks the whole day booked.
+
+## Enquiries
+
+Customers pick event dates, choreo session dates and/or a consultation call,
+add details, and send one message. Instagram can't pre-fill DMs, so the site
+copies the message and opens TNC's DM. The customer pastes it.
+
+### WhatsApp button (optional)
+
+Set `VITE_WHATSAPP_NUMBER` to the number with country code, digits only
+(e.g. `919876543210`). WhatsApp opens with the message already typed.
+
+### Enquiry emails (optional, recommended)
+
+Every enquiry is emailed to thenaachcompany04@gmail.com and logged in a Google
+Sheet, even if the customer never sends the DM. Do this **signed in as
+thenaachcompany04@gmail.com**:
+
+1. Create a new Google Sheet, e.g. "TNC Enquiries".
+2. In it: *Extensions → Apps Script*. Delete the sample code, paste in
+   [`google-apps-script/enquiry-notifier.gs`](google-apps-script/enquiry-notifier.gs), save.
+3. Pick `testNotification` in the function dropdown → *Run*. Approve the
+   permissions (*Advanced → Go to project (unsafe)* is normal for your own
+   script). You should get a test email and an "Enquiries" tab in the sheet.
+4. *Deploy → New deployment* → type **Web app** →
+   *Execute as*: **Me**, *Who has access*: **Anyone** → *Deploy*.
+5. Copy the *Web app URL* (ends in `/exec`) into `VITE_ENQUIRY_URL` in `.env`
+   and in Render's environment variables, then redeploy.
+
+If you edit the script later, use *Deploy → Manage deployments → Edit →
+New version* to keep the same URL.
