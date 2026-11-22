@@ -222,8 +222,8 @@ function AvailabilityCalendar() {
             Plan your dates
           </h2>
           <p className="mt-4 text-sm text-tnc-teal/70">
-            Pick your event date, when you&apos;d like to rehearse, and a time for a
-            quick call. Choose any or all, then send it to us in one message.
+            Your big day, your rehearsal days, a quick chat with us. Pick
+            what you know, skip what you don&apos;t, and send it all our way in one go.
           </p>
         </motion.div>
 
