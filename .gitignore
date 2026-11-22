@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.local
+
+# raw source media (site uses public/videos)
+content/
+
+# local Claude Code settings
+.claude/settings.local.json
