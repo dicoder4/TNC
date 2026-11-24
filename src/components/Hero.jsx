@@ -96,7 +96,7 @@ export default function Hero() {
             style={gradientText}
             className="font-display text-4xl italic leading-[1.15] tracking-tight sm:text-5xl lg:text-[3.4rem]"
           >
-            Bengaluru&apos;s go-to for wedding choreo that actually slaps.
+            Your go-to team for wedding choreography that actually slaps.
           </motion.h1>
 
           <motion.div
